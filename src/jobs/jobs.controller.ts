@@ -21,7 +21,7 @@ import { ValidationPipe } from '../pipes/validation.pipe';
 // import { HttpExceptionFilter } from '../filters/http-exception.filter';
 // import { JobData } from '../decorators/jobdata.decorator';
 import { BenchmarkInterceptor } from '../interceptors/benchmark.interceptor';
-import { ApiForbiddenResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiForbiddenResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('jobs')
 @Controller('jobs')
@@ -34,14 +34,18 @@ export class JobsController {
     description: 'The resource list has been successfully returned',
   })
   @ApiForbiddenResponse({ description: 'Forbidden.' })
-  @Render('jobs/index')
+  // @Render('jobs/index')
   @CacheKey('allJobs')
   @CacheTTL(15)
-  root() {
-    return this.jobsService
-      .findAll()
-      .then((result) => (result ? { jobs: result } : { jobs: [] }));
+  @Get()
+  findAll(): Promise<Job[]> {
+    return this.jobsService.findAll();
   }
+  // root() {
+  //   return this.jobsService
+  //     .findAll()
+  //     .then((result) => (result ? { jobs: result } : { jobs: [] }));
+  // }
 
   @Get(':id')
   @ApiOkResponse({
@@ -65,8 +69,8 @@ export class JobsController {
       });
   }
   @Post()
-  @ApiOkResponse({
-    description: 'The resource has been successfully returned',
+  @ApiCreatedResponse({
+    description: 'The resource has been successfully created',
   })
   @ApiForbiddenResponse({ description: 'Forbidden.' })
   create(@Body(ValidationPipe) job: jobDTO): Promise<Job> {
@@ -74,7 +78,7 @@ export class JobsController {
   }
   @Put(':id')
   @ApiOkResponse({
-    description: 'The resource list has been successfully returned',
+    description: 'The resource  has been successfully updated',
   })
   @ApiForbiddenResponse({ description: 'Forbidden.' })
   update(@Param('id') id: string, @Body() job: jobDTO): Promise<Job> {
@@ -82,7 +86,7 @@ export class JobsController {
   }
   @Delete(':id')
   @ApiOkResponse({
-    description: 'The resource list has been successfully returned',
+    description: 'The resource has been successfully removed',
   })
   @ApiForbiddenResponse({ description: 'Forbidden.' })
   delete(@Param('id') id: string): Promise<Job> {

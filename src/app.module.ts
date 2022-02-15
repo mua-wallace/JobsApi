@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 import { JobsModule } from './jobs/job.module';
 
 @Module({
@@ -10,7 +12,7 @@ import { JobsModule } from './jobs/job.module';
       useUnifiedTopology: true,
     }),
   ],
-  controllers: [],
-  providers: [],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

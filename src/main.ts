@@ -1,18 +1,18 @@
 import { NestFactory } from '@nestjs/core';
-import { NestExpressApplication } from '@nestjs/platform-express';
+// import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { join } from 'path';
+// import { join } from 'path';
 import { AppModule } from './app.module';
 // import { HttpExceptionFilter } from './filters/http-exception.filter';
 import { ValidationExceptionFilter } from './filters/validation-exception-filter';
 import { ValidationPipe } from './pipes/validation.pipe';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create(AppModule);
 
-  app.useStaticAssets(join(__dirname, '..', 'public'));
-  app.setBaseViewsDir(join(__dirname, '..', 'views'));
-  app.setViewEngine('pug');
+  // app.useStaticAssets(join(__dirname, '..', 'public'));
+  // app.setBaseViewsDir(join(__dirname, '..', 'views'));
+  // app.setViewEngine('pug');
   // app.setViewEngine('hbs');
 
   app.useGlobalFilters(new ValidationExceptionFilter());
